@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.stamped.stamped_api.domain.user.dto.CreateUserRequest;
 import com.stamped.stamped_api.domain.user.dto.UserResponse;
 import com.stamped.stamped_api.exception.ResourceNotFoundException;
 
@@ -22,5 +23,13 @@ public class UserService {
     public UserResponse findById(Long id){
         return Optional.ofNullable(users.get(id))
             .orElseThrow(() -> new ResourceNotFoundException("USER_NOT_FOUND : "+ id));
+    }
+
+    public UserResponse create (CreateUserRequest request){
+       Long newId = (long)(users.size()+1);
+        UserResponse newUser = new UserResponse(newId, request.email(),request.username(), "FREE");
+        users.put(newId, newUser);
+        return newUser;
+
     }
 }
